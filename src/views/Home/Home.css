@@ -249,3 +249,15 @@ background-color:#46F7B7 ;
 .red{
     background-color:#F27F77 ;
 }
+@media (max-width: 850px){
+    .home{
+        width: 900px;
+        height: max-content;
+    }
+    .home-content{
+        width: 800px;
+    }
+    .home-content .container{
+        width: 240px;
+    }
+}
