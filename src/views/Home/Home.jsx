@@ -19,7 +19,7 @@ export default function Home() {
     useEffect(() => {
         fetchData();
     }, []);
-
+    /-----------------------------------------INITIAL------------------------------------------/
     const fetchData = () => {
         axios.get("https://663a5a501ae792804bef03fe.mockapi.io/todo/todo")
             .then((res) => {
@@ -54,6 +54,10 @@ export default function Home() {
         setTodo(todoItems);
         setProgress(inProgressItems);
         setComplete(completedItems);
+
+        console.log("Todo list after organizing data:", todo);
+        console.log("Progress list after organizing data:", progress);
+        console.log("Complete list after organizing data:", complete);
     };
 
     function handleExit() {
@@ -64,39 +68,41 @@ export default function Home() {
         setPop(true);
     }
 
+    /-----------------------------------------CREATE------------------------------------------/
     function handleCreateNewTask(data) {
         axios.post(`https://663a5a501ae792804bef03fe.mockapi.io/todo/todo`, data)
             .then(res => {
                 console.log("Task created:", res.data);
-                fetchData(); 
-                setPop(false); 
+                fetchData();
+                setPop(false);
             })
             .catch(err => {
                 console.error("Error creating task:", err);
             });
     }
-
+    /-----------------------------------------DELETE------------------------------------------/
     function Delete(id) {
         axios.delete(`https://663a5a501ae792804bef03fe.mockapi.io/todo/todo/${id}`)
             .then(res => {
                 console.log("deleted");
-                fetchData(); 
+                fetchData();
             })
             .catch(err => {
                 console.error("Error");
             });
     }
-
-    function handleStatusChange(itemId, newStatus) {
-        axios.put(`https://663a5a501ae792804bef03fe.mockapi.io/todo/todo/${itemId}`, { status: newStatus })
-            .then(() => {
-                console.log("Status updated successfully");
-                fetchData(); 
+    /-----------------------------------------UPDATE------------------------------------------/
+    const onMove = (itemId, parsedStatus) => {
+        axios.put(`https://663a5a501ae792804bef03fe.mockapi.io/todo/todo/${itemId}`, { "status": parsedStatus })
+            .then(response => {
+                console.log('Status updated successfully');
+                fetchData();
             })
-            .catch(err => {
-                console.error("Error updating status:", err);
+            .catch(error => {
+                console.error('Error updating status:', error);
             });
-    }
+    };
+
 
     return (
         <>
@@ -114,7 +120,7 @@ export default function Home() {
                     <div className='home-content'>
                         <div className="container">
                             <h3>TO DO</h3>
-                            <Card list={todo} onDelete={Delete} handleStatusChange={handleStatusChange} setTodo={setTodo} setProgress={setProgress} setComplete={setComplete} />
+                            <Card list={todo} onDelete={Delete} onMove={onMove} />
                             <Button onClick={handleAddCard} className='add' label={
                                 <>
                                     <img src={plus} alt="plus" />
@@ -124,16 +130,16 @@ export default function Home() {
                         </div>
                         <div className="container">
                             <h3>IN PROGRESS</h3>
-                            <Card list={progress} onDelete={Delete} handleStatusChange={handleStatusChange} setTodo={setTodo} setProgress={setProgress} setComplete={setComplete} />
+                            <Card list={progress} onDelete={Delete} onMove={onMove} />
                         </div>
                         <div className="container">
                             <h3>COMPLETED</h3>
-                            <Card list={complete} onDelete={Delete} handleStatusChange={handleStatusChange} setTodo={setTodo} setProgress={setProgress} setComplete={setComplete} />
+                            <Card list={complete} onDelete={Delete} onMove={onMove} />
                         </div>
                     </div>
                 </div>
             </div>
-            <CreateNew pop={pop} setPop={setPop} handleStatusChange={handleStatusChange} onCreateNewTask={handleCreateNewTask} />
+            <CreateNew pop={pop} setPop={setPop} onCreateNewTask={handleCreateNewTask} />
         </>
     )
 }

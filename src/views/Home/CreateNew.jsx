@@ -9,6 +9,10 @@ export default function CreateNew({ pop, setPop, onCreateNewTask}) {
     const [title, setTitle] = useState("");
     const [priority, setPriority] = useState("0");
 
+    useEffect(() => {
+        setPopclr('green');
+    }, [pop]);
+
     function handleChange(e) {
         const value = e.target.value;
         setPriority(value);
@@ -24,10 +28,11 @@ export default function CreateNew({ pop, setPop, onCreateNewTask}) {
     }
 
     function handleSubmit() {
-        const data = { title,"status" : 0, priority }; 
+        const data = { title,"status" : 0, priority: parseInt(priority)}; 
         onCreateNewTask(data);
         setTitle("");
         setPop(false);        
+        console.log(priority);
         console.log(data);
     }
 
