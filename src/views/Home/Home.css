@@ -260,4 +260,8 @@ background-color:#46F7B7 ;
     .home-content .container{
         width: 240px;
     }
+    .overlay{
+        width: 100%;
+        height: 100%;
+    }
 }
